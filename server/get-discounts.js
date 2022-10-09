@@ -2,7 +2,8 @@ import { apiBaseUrl } from "./config.js";
 import axios from 'axios';
 
 export async function getDiscounts(accessToken, prodid = 0, locid = 0, chainName = '') {
-  // at time of writing, all params are required, tho the api err return claims only one is required
+  // At time of writing, all params are required, tho the api err return claims only one is required.
+  // This api route is experimental, and returns just one phony result no matter what you send.
   let url = `${apiBaseUrl}/experimental/savings/v0/discounts`;
   const prodFilter = (prodid !== 0) ? `filter.productId=${prodid}` : null;
   const locFilter = (locid !== 0) ? `filter.locationId=${locid}` : null;

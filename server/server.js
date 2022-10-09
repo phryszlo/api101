@@ -10,7 +10,6 @@ const app = express();
 
 let apiResponse;
 
-
 // app.use(cors({
 //   origin: 'http://localhost:3000'
 // }));
@@ -44,25 +43,13 @@ app.all('/*', function (req, res, next) {
   }
 });
 
-app.get("/products/:term", (req, res) => {
+app.get("/products/:term", async (req, res) => {
   try {
-    getAccessToken().then(((s) => {
-      getProducts(req.params.term, s).then(
-        (apiResponse) => {
-          if (apiResponse === []) {
-            console.log("server.js: [] returned");
-            res.send({});
-            return;
-          }
-          console.log(`products route complete`);
-          res.send(apiResponse);
-        }
-      )
-        .catch((err) => {
-          console.log(`from retrieveProducts: ${err}`);
-        });
-    }));
-
+    const token = await getAccessToken();
+    const products = await getProducts(req.params.term);
+    apiResponse = products;
+    console.log(apiResponse);
+    res.send(apiResponse);
   } catch (err) {
     console.log(err);
   }
@@ -70,12 +57,11 @@ app.get("/products/:term", (req, res) => {
 
 app.get("/locations/:zip", async (req, res) => {
   try {
-    console.log(req.params.zip);
-    await retrieveLocations(req.params.zip)
-      .then(() => {
-        console.log(apiResponse);
-        res.send(apiResponse);
-      })
+    const token = await getAccessToken();
+    const locs = await getLocations(req.params.zip, token);
+    apiResponse = locs;
+    console.log(apiResponse);
+    res.send(apiResponse);
   } catch (err) {
     console.log(err);
   }
@@ -87,97 +73,21 @@ app.get("/", (req, res) => {
 
 
 // this is an experimental endpoint: it only returns mock data (always the same, only one record)
- //https://api.kroger.com/experimental/savings/v0/discounts?filter.productId=0001111097139&filter.locationId=01400948&filter.chainName=KROGER&page.size=111&page.offset=1
-
-app.get('/discounts/:prodid/:locid', (req, res) => {
+// https://api.kroger.com/experimental/savings/v0/discounts?filter.productId=0001111097139&filter.locationId=01400948&filter.chainName=KROGER&page.size=111&page.offset=1
+// FUTURE: probably add a chainName param, and/or other routes for diff num params.
+app.get('/discounts/:prodid/:locid', async (req, res) => {
   try {
-     getAccessToken().then((token) => {
-      console.log(`token: ${token}`);
-      getDiscounts(token, req.params.prodid, req.params.locid, 'KROGER')
-        .then(response => {
-          apiResponse = response;
-          console.log(response);
-          res.send(response);
-        })
-        .catch((err) => {
-          console.log(`from retrieveDiscounts: ${err}`);
-        });
-    });
+    const token = await getAccessToken();
+    const discounts = await getDiscounts(token, req.params.prodid, req.params.locid, 'KROGER');
+    apiResponse = discounts;
+    console.log(apiResponse);
+    res.send(apiResponse);
   }
   catch (err) {
     console.log(`GET discounts err: ${err}`);
   }
-
 })
 
-// 🔸🔸🔸🔸🔸
-
-
-// let apiResponse;
-
-
-const retrieveDiscounts = async (locid, prodid = 0) => {
-  try {
-    let discounts = {};
-    await getAccessToken().then(async (token) => {
-      console.log(`token: ${token}`);
-      discounts = await getDiscounts(token, locid, prodid)
-        .then(response => {
-          apiResponse = response;
-          return response;
-        })
-        .catch((err) => {
-          console.log(`from retrieveDiscounts: ${err}`);
-        });
-    });
-  }
-  catch (err) {
-    console.log(`retrieveDiscount err: ${err}`)
-  }
-}
-
-async function retrieveProducts(term) {
-  try {
-    let prods;
-    await getAccessToken().then((async (s) => {
-      prods = await getProducts(term, s).then(
-        (response) => {
-          apiResponse = response;
-          return response;
-        }
-      )
-        .catch((err) => {
-          console.log(`from retrieveProducts: ${err}`);
-        });
-    }));
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-async function retrieveLocations(zip) {
-  try {
-    let locs;
-    await getAccessToken().then((async (s) => {
-      locs = await getLocations(zip, s).then(
-        (response) => {
-          apiResponse = response;
-          return response;
-        }
-      );
-    }));
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-
-
-
-//"eyJhbGciOiJSUzI1NiIsImprdSI6Imh0dHBzOi8vYXBpLmtyb2dlci5jb20vdjEvLndlbGwta25vd24vandrcy5qc29uIiwia2lkIjoiWjRGZDNtc2tJSDg4aXJ0N0xCNWM2Zz09IiwidHlwIjoiSldUIn0.eyJhdWQiOiJncm9jaGVyaS02MzA5MzZhOTVjNjY4NjVjYmU1Njg3YzUzM2RjOTMzMjczNzEyNzUwODk3ODA1ODk0MjQiLCJleHAiOjE2NTE3Nzc0OTEsImlhdCI6MTY1MTc3NTY4NiwiaXNzIjoiYXBpLmtyb2dlci5jb20iLCJzdWIiOiJlNTQ2MDRkOC02MTNlLTU1OWQtOGNkYS0yNGQ2NDhlZDgzM2QiLCJzY29wZSI6IiIsImF1dGhBdCI6MTY1MTc3NTY5MTIwNTI1OTgxNiwiYXpwIjoiZ3JvY2hlcmktNjMwOTM2YTk1YzY2ODY1Y2JlNTY4N2M1MzNkYzkzMzI3MzcxMjc1MDg5NzgwNTg5NDI0In0.xBLrXWEZOq3sAjnKbmZ66N3rnXTyt4xYo4-3wSbyIOH7UJFQF75iwNAwdg3wtw-WIDmmYpAM8ZoJsbzQikPvxNj7hyoRcSOAVS1ts5IO-wDkyWh51m0mmWaWXfpABHWcWoZbfZUNSYepBu64xrk8-trBfKIyFXI66oKSGV3gQ7--iG5HuB2KzFtmGlMZQknZMIJi9y6M0MrdzQxAznpzKiNKPJ9gTVK5tXgk1tJB0fhNBaMuWHiG2xc80R-COeMMZEKguvSeGLceALkiRbYYmtSbqAlk-TWq2zp_h4Eqt90oiYoYOZejHQMEUYesbHWyD2cZBaFbg9SZdBoWb9LZqg");
-
-
-// start express server on port 4000
 app.listen(process.env.PORT || 4000, '0.0.0.0', () => {
   console.log('server started on (allegedly) 4000 and 0.0.0.0');
 });
