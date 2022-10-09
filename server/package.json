@@ -1,0 +1,22 @@
+{
+  "name": "node_server",
+  "type": "module",
+  "version": "0.0.0",
+  "description": "node_server",
+  "proxy": "https://api.kroger.com",
+  "main": "server.js",
+  "author": {
+    "name": ""
+  },
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "fs": "^0.0.1-security"
+  }
+}
