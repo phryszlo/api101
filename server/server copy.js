@@ -8,9 +8,6 @@ import bodyParser from 'body-parser';
 
 const app = express();
 
-let apiResponse;
-
-
 // app.use(cors({
 //   origin: 'http://localhost:3000'
 // }));
@@ -44,25 +41,24 @@ app.all('/*', function (req, res, next) {
   }
 });
 
-app.get("/products/:term", (req, res) => {
-  try {
-    getAccessToken().then(((s) => {
-      getProducts(req.params.term, s).then(
-        (apiResponse) => {
-          if (apiResponse === []) {
-            console.log("server.js: [] returned");
-            res.send({});
-            return;
-          }
-          console.log(`products route complete`);
-          res.send(apiResponse);
-        }
-      )
-        .catch((err) => {
-          console.log(`from retrieveProducts: ${err}`);
-        });
-    }));
 
+app.get("/products/:term", async (req, res) => {
+  try {
+    console.log(req.params.term);
+    await retrieveProducts(req.params.term)
+      .then(() => {
+        console.log("apiResponse: ", apiResponse);
+        if (apiResponse === []) {
+          console.log("server.js: [] returned");
+          res.send({});
+          return;
+        }
+        console.log(apiResponse[0].items[0].price.regular);
+        res.send(apiResponse);
+      })
+      .catch((err) => {
+        console.log("retrieveProducts error: ", err);
+      })
   } catch (err) {
     console.log(err);
   }
@@ -84,25 +80,16 @@ app.get("/locations/:zip", async (req, res) => {
 app.get("/", (req, res) => {
   res.send("the root!");
 });
-
-
+ 
+// 🔸🔸🔸🔸🔸
 // this is an experimental endpoint: it only returns mock data (always the same, only one record)
- //https://api.kroger.com/experimental/savings/v0/discounts?filter.productId=0001111097139&filter.locationId=01400948&filter.chainName=KROGER&page.size=111&page.offset=1
-
-app.get('/discounts/:prodid/:locid', (req, res) => {
+app.get('/discounts/:locid', (req, res) => {
   try {
-     getAccessToken().then((token) => {
-      console.log(`token: ${token}`);
-      getDiscounts(token, req.params.prodid, req.params.locid, 'KROGER')
-        .then(response => {
-          apiResponse = response;
-          console.log(response);
-          res.send(response);
-        })
-        .catch((err) => {
-          console.log(`from retrieveDiscounts: ${err}`);
-        });
-    });
+    console.log(`discount params: ${req.params.locid} `);
+    retrieveDiscounts(req.params.locid)
+      .then (() => {
+        console.log(`GET discount response: ${apiResponse}`)
+      })
   }
   catch (err) {
     console.log(`GET discounts err: ${err}`);
@@ -110,10 +97,9 @@ app.get('/discounts/:prodid/:locid', (req, res) => {
 
 })
 
-// 🔸🔸🔸🔸🔸
 
 
-// let apiResponse;
+let apiResponse;
 
 
 const retrieveDiscounts = async (locid, prodid = 0) => {
