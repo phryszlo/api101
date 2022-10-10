@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Blaka+Ink&family=Bungee+Shade&family=Butcherman&family=Crimson+Text&family=Faster+One&family=Gemunu+Libre&family=Mochiy+Pop+One&family=Molle&family=Montserrat:wght@300;400&family=Noto+Sans+Mono:wght@300&family=Overpass&family=Rajdhani&display=swap');
+
+
+body {
+  /* font-family: 'Blaka Ink', cursive; */
+  /* font-family: 'Bungee Shade', cursive; */
+  /* font-family: 'Butcherman', cursive; */
+  /* font-family: 'Crimson Text', serif; */
+  /* font-family: 'Faster One', cursive; */
+  /* font-family: 'Gemunu Libre', sans-serif; */
+  /* font-family: 'Mochiy Pop One', sans-serif; */
+  /* font-family: 'Molle', cursive; */
+  /* font-family: 'Montserrat', sans-serif; */
+  /* font-family: 'Noto Sans Mono', monospace; */
+  /* font-family: 'Overpass', sans-serif; */
+  font-family: 'Rajdhani', sans-serif;
+  min-height: 100vh;
+}
+
+.btn-close {
+  background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+}
+
+.App {
+  display: flex;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.app-content {
+  min-height: 96vh;
+  width: 100%;
+  margin: 0 auto;
+  overflow-y: auto;
+  /* border: 4px solid darkgoldenrod; */
+}
+
+.offcanvas-full {
+
+  height: 100vh;
+  width: fit-content;
+  /* padding: 0 1.5em; */
+  margin: 0;
+  /* border: 4px solid orange; */
+}
+
+.card-header {
+  text-align: left;
+  padding: .3em 2.4em;
+}
+
+
+.offcanvas-body {
+  width: fit-content;
+  height: 90%;
+  border-left: .1px solid #4442;
+  padding: 0 .2em;
+}
+
+.offcanvas-xl,
+.offcanvas-lg,
+.offcanvas-md,
+.offcanvas-sm {
+  max-width: fit-content;
+  /* border: 3px solid red; */
+}
+
+.offcanvasbody-full {
+  height: 100%;
+}
+
+@media (min-width: 992px) {
+  .show-offcanvas-button {
+    display: none;
+  }
+}
+
+.rr-link {
+  text-decoration: none;
+  color: #444a;
+}
+
+.nav-vertical {
+  height: 100%;
+  /* border: 3px solid lime; */
+
+}
+
+.card-full-height {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  /* border: 3px solid orangered; */
+}
+
+.list-group-mine {
+  margin: 0;
+}
+
+.nav-vertical {
+  text-align: left;
+}
+
+
+/* .show-offcanvas-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+} */
