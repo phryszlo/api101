@@ -15,17 +15,21 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
+import Home from './components/Home';
 import GroCheri from './components/GroCheri';
 import ContainerFluidExample from './components/ContainerFluidExample';
 
-
+// ✖️✖️✖️✖️✖️✖️
 function App() {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+
+  // 🟢🟢🟢
   return (
 
     <Container fluid className="App app-container">
@@ -34,15 +38,17 @@ function App() {
 
         <Col xs={9}> */}
       <div className="app-content">
-        <h1 className="title">The API Special 101</h1>
-        <Button className="show-offcanvas-button" variant="primary" onClick={handleShow}>
-          Launch
-        </Button>
+        <header className="main-header">
+          <h1 className="title">The API Special 101</h1>
+          <Button className="show-offcanvas-button" variant="secondary" onClick={handleShow}>
+            <span className="burger material-icons">toc</span>
+          </Button>
+        </header>
 
         {/* <ContainerFluidExample /> */}
 
         <Routes>
-          <Route index path='home' />
+          <Route index path='home' element={<Home />} />
           <Route path='gro-cheri' element={<GroCheri />} />
         </Routes>
       </div>
@@ -50,28 +56,43 @@ function App() {
 
         <Col> */}
       {/* {['start', 'end', 'top', 'bottom'].map((placement, idx) => ( */}
-      <Offcanvas className="offcanvas-full" show={show} onHide={handleClose} placement="end" responsive="lg">
-        <OffcanvasHeader closeButton>
-          {/* <OffcanvasTitle>Navigation</OffcanvasTitle> */}
-        </OffcanvasHeader>
+      <Offcanvas id="offcanvas-full" className="offcanvas-full" show={show} onHide={handleClose} placement="end" responsive="lg">
+
         <Offcanvas.Body className="offcanvasbody-full">
           <Nav className="nav-vertical justify-content-center flex-column" variant="tabs" defaultActiveKey="/home">
             <Card className="card-full-height">
-              <Card.Header as="h5">Featuring</Card.Header>
+              <Card.Header className="card-header-mine" as="h5">
+                <span> Featuring</span>
+                <button className="btn-close-mine" onClick={handleClose}></button>
+                </Card.Header>
               <Card.Body>
                 <ListGroup className="list-group-flush">
                   <ListGroup.Item>
                     <Nav.Item>
-                      <Link className="rr-link" to="/home">Home</Link>
+                      <Link
+                        className="rr-link"
+                        to="/home"
+                        onClick={handleClose}>
+                        Home
+                      </Link>
                     </Nav.Item>
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <Nav.Item>
-                      <Link className="rr-link" to="/gro-cheri" eventKey="link-1">Gro-Cheri</Link>
+                      <Link
+                        className="rr-link"
+                        to="/gro-cheri"
+                        onClick={handleClose}>
+                        Gro-Cheri
+                      </Link>
                     </Nav.Item></ListGroup.Item>
                   <ListGroup.Item>
                     <Nav.Item>
-                      <Link className="rr-link" eventKey="link-2">Something Else</Link>
+                      <Link
+                        className="rr-link"
+                        onClick={handleClose}>
+                        Something Else
+                      </Link>
                     </Nav.Item>
                   </ListGroup.Item>
                 </ListGroup>
