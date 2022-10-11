@@ -1,0 +1,15 @@
+.card-home {
+  width: 30em;
+  margin: 2em auto;
+  background-color: #fff2;
+  border-radius: 5%;
+  box-shadow: .2px .2px 5px .41px fuchsia;
+}
+.card-text, .card-body {
+  background-color: transparent;
+}
+
+.home-card-img {
+  width: 200px;
+  border-radius: 10%;
+}

@@ -1,108 +1,118 @@
 import './App.css';
-// import 'bootstrap/dist/css/bootstrap.min.css'; //CDN link in index.html
 import './style.css';
 import { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useParams, useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Offcanvas from 'react-bootstrap/Offcanvas';
-import OffcanvasHeader from 'react-bootstrap/OffcanvasHeader';
-import OffcanvasTitle from 'react-bootstrap/OffcanvasTitle';
-import OffcanvasBody from 'react-bootstrap/OffcanvasBody'
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Nav from 'react-bootstrap/Nav';
 
-import { Link } from 'react-router-dom'
+import Home from './components/home/Home';
+import GroCheri from './components/gro-cheri/GroCheri';
+import StoreView from './components/gro-cheri/StoreView';
+import Sidebar from './components/Sidebar';
+import MovieThing from './components/movie-thing/MovieThing';
 
-import Home from './components/Home';
-import GroCheri from './components/GroCheri';
-import ContainerFluidExample from './components/ContainerFluidExample';
+
 
 // ✖️✖️✖️✖️✖️✖️
 function App() {
   const [show, setShow] = useState(false);
+  const [locations, setLocations] = useState(["initial"]);
+
+  const [zipSearch, setZipSearch] = useState("90210");
+  const [currentStoreName, setCurrentStoreName] = useState('Ralphs Fresh Fare - Beverly Doheny');
+  const [currentStoreId, setCurrentStoreId] = useState('70300724');
+  const [currentStore, setCurrentStore] = useState(null);
+  const [viewId, setViewId] = useState(null)
+
+  const navigate = useNavigate();
+
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  // ♾️♾️♾️♾️♾️♾️♾️ one-time effect
+  useEffect(() => {
+    setCurrentStoreName("Ralphs Fresh Fare - Beverly Doheny")
+    setCurrentStoreId("70300724")
+    console.log(`CSN a la app useeffect[]: ${currentStoreName.toString()}`)
+  }, [])
+
+  // ♾️♾️♾️♾️♾️♾️♾️ current store effect
+  useEffect(() => {
+    currentStore && console.log(`app.useEffect.currStore = ${JSON.stringify(currentStore)}`)
+  }, [currentStore])
+
+
+  // ♾️♾️♾️♾️♾️♾️♾️ viewId trigger. viewId is set by handleViewLinkClick, 
+  // and this is here to prevent a console warning (because maybe it's trying to tell me something?)
+  useEffect(() => {
+    console.log(`useEff viewId: ${viewId && viewId}`);
+    viewId
+      ? navigate(`/store-view/${viewId}`)
+      : currentStore && navigate("/store-view");
+  }, [viewId])
+
+
+
+  const setStoreFields = (locid, name) => {
+    setCurrentStoreName(name);
+    setCurrentStoreId(locid);
+  }
+
+  const setStore = (store) => {
+    try {
+      setCurrentStore(store);
+    }
+    catch (err) {
+      console.log(`setStore err: ${err}`);
+    }
+  }
+
+
 
 
   // 🟢🟢🟢
   return (
 
     <Container fluid className="App app-container">
-      {/* <Row>
-        <Col xs={1}></Col>
 
-        <Col xs={9}> */}
       <div className="app-content">
         <header className="main-header">
-          <h1 className="title">The API Special 101</h1>
+          {/* <h1 className="title">The API Special v.0.101</h1> */}
           <Button className="show-offcanvas-button" variant="secondary" onClick={handleShow}>
             <span className="burger material-icons">toc</span>
           </Button>
         </header>
 
-        {/* <ContainerFluidExample /> */}
+
+
+        {/* 🤺🤺🤺🤺ROUTES🤺🤺🤺🤺🤺 */}
 
         <Routes>
           <Route index path='home' element={<Home />} />
-          <Route path='gro-cheri' element={<GroCheri />} />
+          <Route path='gro-cheri' element={
+            <GroCheri
+              viewId={viewId}
+              setViewId={setViewId}
+              locations={locations}
+              setLocations={setLocations}
+              setStore={setStore}
+              currentStore={currentStore}
+              currentStoreName={currentStoreName}
+              setStoreFields={setStoreFields}
+              zipSearch={zipSearch}
+              setZipSearch={setZipSearch} />
+          } />
+
+          <Route path='store-view' element={<StoreView passedStore={currentStore} />}>
+          </Route>
+          <Route path="store-view/:locId" element={<StoreView />} />
+
+          <Route path='movie-thing' element={<MovieThing />} />
         </Routes>
       </div>
-      {/* </Col>
 
-        <Col> */}
-      {/* {['start', 'end', 'top', 'bottom'].map((placement, idx) => ( */}
-      <Offcanvas id="offcanvas-full" className="offcanvas-full" show={show} onHide={handleClose} placement="end" responsive="lg">
-
-        <Offcanvas.Body className="offcanvasbody-full">
-          <Nav className="nav-vertical justify-content-center flex-column" variant="tabs" defaultActiveKey="/home">
-            <Card className="card-full-height">
-              <Card.Header className="card-header-mine" as="h5">
-                <span> Featuring</span>
-                <button className="btn-close-mine" onClick={handleClose}></button>
-                </Card.Header>
-              <Card.Body>
-                <ListGroup className="list-group-flush">
-                  <ListGroup.Item>
-                    <Nav.Item>
-                      <Link
-                        className="rr-link"
-                        to="/home"
-                        onClick={handleClose}>
-                        Home
-                      </Link>
-                    </Nav.Item>
-                  </ListGroup.Item>
-                  <ListGroup.Item>
-                    <Nav.Item>
-                      <Link
-                        className="rr-link"
-                        to="/gro-cheri"
-                        onClick={handleClose}>
-                        Gro-Cheri
-                      </Link>
-                    </Nav.Item></ListGroup.Item>
-                  <ListGroup.Item>
-                    <Nav.Item>
-                      <Link
-                        className="rr-link"
-                        onClick={handleClose}>
-                        Something Else
-                      </Link>
-                    </Nav.Item>
-                  </ListGroup.Item>
-                </ListGroup>
-              </Card.Body>
-            </Card>
-          </Nav>
-        </Offcanvas.Body>
-      </Offcanvas>
-      {/* </Col>
-      </Row> */}
+      <Sidebar handleClose={handleClose} show={show} />
 
     </Container >
   );

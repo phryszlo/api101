@@ -1,5 +1,5 @@
 import { getAccessToken } from './get-access-token.js';
-import { getLocations } from './get-locations.js';
+import { getLocations, getStore } from './get-locations.js';
 import { getProducts } from './get-products.js';
 import { getDiscounts } from './get-discounts.js';
 // import cors from 'cors';
@@ -66,6 +66,23 @@ app.get("/locations/:zip", async (req, res) => {
     console.log(err);
   }
 });
+
+app.get("/", (req, res) => {
+  res.send("the root!");
+});
+
+app.get("/store/:locid", async (req, res) => {
+  try {
+    const token = await getAccessToken();
+    const store = await getStore(req.params.locid, token);
+    apiResponse = store;
+    console.log(apiResponse);
+    res.send(apiResponse);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 
 app.get("/", (req, res) => {
   res.send("the root!");

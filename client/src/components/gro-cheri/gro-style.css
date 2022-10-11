@@ -1,0 +1,106 @@
+h2.title {
+  margin: 0 0 .7em 0;
+}
+
+.current-store-label {
+  margin-right: 1em;
+  color: rgb(227, 105, 105);
+}
+
+.set-loc-anchor {
+  font-size: 11px;
+  padding: 0 .2em;
+  background-color: transparent;
+  border: .3px solid var(--btn-gold);
+  color: var(--btn-gold);
+}
+
+.loc-row td {
+  padding: .4em .6em;
+  text-align: left;
+  font-size: 12px;
+  color: var(--color4);
+  border: .3px solid var(--colorGreen0);
+}
+
+/* store-view */
+.storeview-component {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  min-width: 56vw;
+  max-width: 77vw;
+  height: fit-content;
+  min-height: 40vh;
+  margin: 1em auto;
+  border: .4px solid #4444;
+}
+
+.storeview-display h4 {
+  text-shadow: 1px .8px darkred;
+}
+
+.stack-row {
+  width: fit-content;
+  margin: auto;
+}
+
+.stack-row span {
+  min-width: 10em;
+}
+
+.set-view-buttons {
+  display: flex;
+  justify-content: flex-start;
+  /* border: .2px solid orangered; */
+}
+
+.hours-table {
+  border-collapse: collapse;
+  border: .5px double #fff;
+  width: fit-content;
+  margin: 1em auto;
+}
+
+.hours-table th {
+  text-align: center;
+  font-size: 13px;
+  border: .3px solid #222;
+  color: darkorange;
+  padding: .2em 1.6em;
+}
+
+.hours-table td {
+  padding: .4em 1.6em;
+  text-align: center;
+  font-size: 14px;
+  color: var(--color4);
+  border: .3px solid #222;
+}
+
+.hours-table .hours-checked-td {
+  text-align: center;
+}
+
+.locations-table {
+  border-collapse: collapse;
+  border: .5px double #fff;
+  border-color: var(--component-bg);
+  width: fit-content;
+  margin: auto;
+}
+
+.locations-table th {
+  font-size: 13px;
+  border: .3px solid #222;
+  color: darkorange;
+  padding: .2em 1.6em;
+}
+
+.locations-table td {
+  padding: .4em 1.6em;
+  text-align: left;
+  font-size: 14px;
+  color: var(--color4);
+  border: .3px solid #222;
+}
